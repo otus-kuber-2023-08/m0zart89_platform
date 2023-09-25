@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: selfsigned
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  labels:
+    app.kubernetes.io/name: nginx-ingress
+    app.kubernetes.io/part-of: kubernetes-dashboard
+    k8slens-edit-resource-version: v1
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /dashboard(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: kubernetes-dashboard-api
+                port:
+                  name: api
+          - path: /dashboard(/|$)(?!api)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: kubernetes-dashboard-web
+                port:
+                  name: web
