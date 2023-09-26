@@ -8,6 +8,13 @@ spec:
   containers:
     - name: web
       image: mozart89/otus-2-web
+      readinessProbe:
+        httpGet:
+          path: /index.html
+          port: 8000
+      livenessProbe:
+        tcpSocket:
+          port: 8000
       volumeMounts:
         - name: app
           mountPath: /app
