@@ -13,3 +13,4 @@ helm push frontend-0.1.0.tgz oci://harbor.${EXTERNAL_IP}.sslip.io/library
 helm package hipster-shop
 helm push hipster-shop-0.1.0.tgz oci://harbor.${EXTERNAL_IP}.sslip.io/library
 helm upgrade --install hipster-shop hipster-shop --namespace hipster-shop --create-namespace -f hipster-shop/secrets.yaml
+echo "shop link: https://shop.${EXTERNAL_IP}.sslip.io"
