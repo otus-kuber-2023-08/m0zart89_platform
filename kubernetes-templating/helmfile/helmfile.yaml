@@ -1,0 +1,29 @@
+repositories:
+- name: jetstack
+  url: https://charts.jetstack.io
+- name: chartmuseum
+  url: https://chartmuseum.github.io/charts
+- name: harbor
+  url: https://helm.goharbor.io
+
+releases:
+- name: cert-manager
+  namespace: cert-manager
+  chart: jetstack/cert-manager
+  set:
+    - name: installCRDs
+      value: true
+  hooks:
+    - events: ['postsync']
+      command: 'kubectl'
+      args: ['apply', '-f', '../cert-manager/issuer-letsencrypt-production.yaml']
+- name: chartmuseum
+  namespace: chartmuseum
+  chart: chartmuseum/chartmuseum
+  values:
+    - ./../chartmuseum/values.yaml.tpl
+- name: harbor
+  namespace: harbor-system
+  chart: harbor/harbor
+  values:
+    - ./../harbor/values.yaml.tpl
