@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-web-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx-web
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nginx-web
+    spec:
+      containers:
+      - name: nginx-web
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-web-config
+          mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: nginx-web-config
+          configMap:
+            name: nginx-web-config

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-exporter-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx-exporter
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-exporter
+    spec:
+      containers:
+      - name: nginx-exporter
+        image: 'nginx/nginx-prometheus-exporter:0.10.0'
+        args:
+          - '-nginx.scrape-uri=http://nginx-web/basic_status'
+        ports:
+          - containerPort: 9113
