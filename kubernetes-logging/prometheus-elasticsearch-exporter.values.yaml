@@ -1,0 +1,101 @@
+affinity: {}
+deployment:
+  annotations: {}
+  labels: {}
+dnsConfig: {}
+env: {}
+envFromSecret: ""
+es:
+  aliases: false
+  all: true
+  cluster_settings: true
+  data_stream: false
+  indices: true
+  indices_mappings: true
+  indices_settings: true
+  shards: true
+  slm: false
+  snapshots: true
+  ssl:
+    ca:
+      path: /ssl/ca.pem
+    client:
+      enabled: true
+      keyPath: /ssl/client.key
+      pemPath: /ssl/client.pem
+    enabled: false
+    useExistingSecrets: false
+  sslSkipVerify: true
+  timeout: 30s
+  uri: http://elasticsearch-master:9200
+extraArgs: []
+extraEnvSecrets: {}
+extraVolumeMounts: []
+extraVolumes: []
+global:
+  imagePullSecrets: []
+image:
+  pullPolicy: IfNotPresent
+  pullSecret: ""
+  repository: quay.io/prometheuscommunity/elasticsearch-exporter
+  tag: ""
+initContainers: []
+log:
+  format: logfmt
+  level: info
+nodeSelector:
+  pool: infra
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  seccompProfile:
+    type: RuntimeDefault
+podSecurityPolicies:
+  enabled: false
+priorityClassName: ""
+prometheusRule:
+  enabled: false
+  labels: {}
+  rules: []
+replicaCount: 1
+resources: {}
+restartPolicy: Always
+secretMounts: []
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+service:
+  annotations: {}
+  httpPort: 9108
+  labels: {}
+  metricsPort:
+    name: http
+  type: ClusterIP
+serviceAccount:
+  annotations: {}
+  automountServiceAccountToken: true
+  create: false
+  name: default
+serviceMonitor:
+  enabled: true
+  interval: 10s
+  jobLabel: ""
+  labels: {}
+  metricRelabelings: []
+  relabelings: []
+  sampleLimit: 0
+  scheme: http
+  scrapeTimeout: 10s
+  targetLabels: []
+tolerations:
+- effect: NoSchedule
+  key: node-role
+  operator: Equal
+  value: infra
+web:
+  path: /metrics

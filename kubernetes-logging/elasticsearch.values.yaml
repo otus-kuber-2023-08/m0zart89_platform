@@ -1,0 +1,13 @@
+tolerations:
+  - key: node-role
+    operator: Equal
+    value: infra
+    effect: NoSchedule
+nodeSelector:
+  pool: infra
+
+image: "elasticsearch"
+imageTag: "7.17.3"
+imagePullPolicy: "IfNotPresent"
+
+clusterHealthCheckParams: wait_for_status=green&timeout=1s
