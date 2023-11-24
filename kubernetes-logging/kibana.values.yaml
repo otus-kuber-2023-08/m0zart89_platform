@@ -1,0 +1,15 @@
+image: kibana
+imageTag: 7.17.3
+
+tolerations:
+  - key: node-role
+    operator: Equal
+    value: infra
+    effect: NoSchedule
+
+ingress:
+  enabled: true
+  hosts:
+    - host: kibana.158.160.132.116.sslip.io
+      paths:
+        - path: /
