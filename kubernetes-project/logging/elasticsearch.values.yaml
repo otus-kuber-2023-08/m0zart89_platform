@@ -1,0 +1,7 @@
+image: "elasticsearch"
+tolerations:
+  - key: node-role
+    operator: Equal
+    value: infra
+    effect: NoSchedule
+clusterHealthCheckParams: wait_for_status=green&timeout=1s

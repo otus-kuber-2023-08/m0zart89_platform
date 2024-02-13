@@ -1,0 +1,15 @@
+image: "kibana"
+imagePullSecrets:
+  - name: regcred
+tolerations:
+  - key: node-role
+    operator: Equal
+    value: infra
+    effect: NoSchedule
+
+ingress:
+  enabled: true
+  hosts:
+    - host: kibana.158.160.132.73.sslip.io
+      paths:
+        - path: /

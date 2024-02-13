@@ -1,0 +1,26 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microservices-demo-server-ingress
+  namespace: microservices-demo
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: shop.158.160.132.73.sslip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - shop.158.160.132.73.sslip.io
+      secretName: shop.158.160.132.73.sslip.io-tls
+...

@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  annotations:
+    meta.helm.sh/release-name: demo
+    meta.helm.sh/release-namespace: monitoring
+    prometheus-operator-validated: "true"
+  labels:
+    app: kube-prometheus-stack
+    app.kubernetes.io/instance: demo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    heritage: Helm
+    release: demo
+  name: demo-kube-prometheus-st-alertmanager.rules
+  namespace: monitoring
+spec:
+  groups:
+    - name: alertmanager.rules
+      rules:
+        - alert: CPUUsageSpike
+          annotations:
+            description: Pod {{$labels.pod}} has CPU Utilisation Spike'
+            summary: Pod has reached CPU Utilisation Threshold
+          expr: avg by (pod) (rate(container_cpu_usage_seconds_total[5m]))
+            == 0
+          for: 1m
+          labels:
+            severity: p1
