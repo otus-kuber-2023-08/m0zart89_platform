@@ -1,0 +1,67 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd-image-updater.argoproj.io/write-back-method: argocd
+    argocd-image-updater.argoproj.io/frontend.force-update: "true"
+
+    argocd-image-updater.argoproj.io/image-list: adservice=mozart89/adservice:latest, cartservice=mozart89/cartservice:latest, checkoutservice=mozart89/checkoutservice:latest, currencyservice=mozart89/currencyservice:latest, emailservice=mozart89/emailservice:latest, frontend=mozart89/frontend:latest, loadgenerator=mozart89/loadgenerator:latest, paymentservice=mozart89/paymentservice:latest, productcatalogservice=mozart89/productcatalogservice:latest, recommendationservice=mozart89/recommendationservice:latest, shippingservice=mozart89/shippingservice:latest
+
+    argocd-image-updater.argoproj.io/adservice.helm.image-tag: adService.tag
+    argocd-image-updater.argoproj.io/adservice.update-strategy: digest
+
+    argocd-image-updater.argoproj.io/cartservice.helm.image-tag: cartService.tag
+    argocd-image-updater.argoproj.io/cartservice.update-strategy: digest
+
+    argocd-image-updater.argoproj.io/checkoutservice.helm.image-tag: checkoutService.tag
+    argocd-image-updater.argoproj.io/checkoutservice.update-strategy: digest
+
+    argocd-image-updater.argoproj.io/currencyservice.helm.image-tag: currencyService.tag
+    argocd-image-updater.argoproj.io/currencyservice.update-strategy: digest
+
+    argocd-image-updater.argoproj.io/emailservice.helm.image-tag: emailService.tag
+    argocd-image-updater.argoproj.io/emailservice.update-strategy: digest
+
+    argocd-image-updater.argoproj.io/frontend.helm.image-tag: frontend.tag
+    argocd-image-updater.argoproj.io/frontend.update-strategy: digest
+
+    argocd-image-updater.argoproj.io/loadgenerator.helm.image-tag: loadGenerator.tag
+    argocd-image-updater.argoproj.io/loadgenerator.update-strategy: digest
+
+    argocd-image-updater.argoproj.io/paymentservice.helm.image-tag: paymentService.tag
+    argocd-image-updater.argoproj.io/paymentservice.update-strategy: digest
+
+    argocd-image-updater.argoproj.io/productcatalogservice.helm.image-tag: productCatalogService.tag
+    argocd-image-updater.argoproj.io/productcatalogservice.update-strategy: digest
+
+    argocd-image-updater.argoproj.io/recommendationservice.helm.image-tag: recommendationService.tag
+    argocd-image-updater.argoproj.io/recommendationservice.update-strategy: digest
+
+    argocd-image-updater.argoproj.io/shippingservice.helm.image-tag: shippingService.tag
+    argocd-image-updater.argoproj.io/shippingservice.update-strategy: digest
+
+  name: microservices-demo
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: microservices-demo
+spec:
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
+  project: default
+  source:
+    repoURL: 'https://gitlab.com/m0zart89/microservices-demo.git'
+    targetRevision: main
+    path: helm-chart
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: microservices-demo
