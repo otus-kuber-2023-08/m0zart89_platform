@@ -1,0 +1,8 @@
+image:
+  repository: mozart89/cartservice
+  tag: v0.0.2
+
+redis:
+  cluster:
+    enabled: false
+  usePassword: false
