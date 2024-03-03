@@ -1,0 +1,5 @@
+image:
+  repository: mozart89/frontend
+  tag: v0.0.2
+ingress:
+  host: shop.158.160.130.13.sslip.io

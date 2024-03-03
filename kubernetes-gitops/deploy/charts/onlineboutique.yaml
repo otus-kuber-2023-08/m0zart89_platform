@@ -1,0 +1,11 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: onlineboutique
+  namespace: microservices-demo
+spec:
+  interval: 30s
+  ref:
+    branch: main
+  url: https://gitlab.com/m0zart89/microservices-demo.git
