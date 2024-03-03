@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vault-test
+  labels:
+    app: vault-test
+spec:
+  serviceAccountName: vault-auth
+  containers:
+  - image: nginx:latest
+    name: vault-test
+    volumeMounts:
+    - name: vault-auth-secret
+      mountPath: /etc/sa-token
+  volumes:
+  - name: vault-auth-secret
+    secret:
+      secretName: vault-auth-secret
+...
