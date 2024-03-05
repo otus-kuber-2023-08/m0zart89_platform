@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: iscsi-pv-pod
+  name: iscsi-pv-pod
+spec:
+  containers:
+  - name: iscsi-pv-pod-alpine
+    image: alpine
+    command: ["sleep", "60000"]
+    volumeMounts:
+    - name: iscsi-vol1
+      mountPath: /opt
+      readOnly: false
+  volumes:
+  - name: iscsi-vol1
+    persistentVolumeClaim:
+      claimName: iscsi-pvc
