@@ -1,15 +1,15 @@
 # Kubeadm
 
-# Подготовим ноды
+## Подготовим ноды
 
-# Отключим своп
+## Отключим своп
 ```shell
-sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+sudo sed -i '/ swap / s/^\(.*\)$/##\1/g' /etc/fstab
 sudo swapoff -a
 ```
 
 
-# Сетевая настройка
+## Сетевая настройка
 ```shell
 sudo tee /etc/sysctl.d/99-kubernetes-cri.conf<<EOF
 net.bridge.bridge-nf-calliptables = 1
@@ -30,7 +30,7 @@ EOF
 sudo sysctl --system
 ```
 
-# Установим контейнеры и исполняемые файлы kubernetes
+## Установим контейнеры и исполняемые файлы kubernetes
 ```shell
 sudo apt-get install -y containerd
 sudo apt-get install -y apt-transport-https ca-certificates curl gpg
@@ -43,7 +43,7 @@ sudo apt-get update && sudo apt-get install -y kubelet kubeadm kubectl
 sudo kubeadm init --pod-network-cidr=10.129.0.0/16 --upload-certs --kubernetes-version=v1.27.0 --ignore-preflight-errors=Mem --cri-socket /run/containerd/containerd.sock
 ```
 
-# Инициализируем kubernetes на master1
+## Инициализируем kubernetes на master1
 ```shell
 Your Kubernetes control-plane has initialized successfully!
 
@@ -67,12 +67,12 @@ kubeadm join 10.129.0.14:6443 --token 3aojn1.yultf8cvtxks531n \
         --discovery-token-ca-cert-hash sha256:09475fcb308a0f92a0c5e1a6be4f3557c5d51f7dd5b60c5e1ede064aae6258fc 
 ```
 
-# Добавим ноды в кластер
+## Добавим ноды в кластер
 ```shell
 sudo kubeadm join 10.129.0.14:6443 --token 3aojn1.yultf8cvtxks531n         --discovery-token-ca-cert-hash sha256:09475fcb308a0f92a0c5e1a6be4f3557c5d51f7dd5b60c5e1ede064aae6258fc
 ```
 
-# Настроим пользование кластером
+## Настроим пользование кластером
 ```shell
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -81,7 +81,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
 ```
 
-# Кластер
+## Кластер
 ```shell
 kubectl get nodes
 NAME      STATUS   ROLES           AGE    VERSION
@@ -111,14 +111,14 @@ NAME                                          DESIRED   CURRENT   READY   AGE
 replicaset.apps/nginx-deployment-57d84f57dc   4         4         0       9s
 ```
 
-# Обновляем версию кластера
+## Обновляем версию кластера
 ```shell
 sudo rm -rf /etc/apt/keyrings/kubernetes-apt-keyring.gpg && curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo apt-get update && sudo apt-get install -y kubelet kubeadm kubectl
 ```
 
-# На master
+## На master
 ```shell
 sudo kubeadm upgrade plan
 [upgrade/config] Making sure the configuration is correct:
@@ -187,7 +187,7 @@ sudo kubeadm upgrade apply v1.28.7
 [upgrade/kubelet] Now that your control plane is upgraded, please proceed with upgrading your kubelets if you haven't already done so.
 ```
 
-# master1 обновлён, нужно перезагрузить kubelet
+## master1 обновлён, нужно перезагрузить kubelet
 ```shell
 eugen@master1:~$ kubectl get node -o wide
 NAME      STATUS   ROLES           AGE    VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
@@ -204,7 +204,7 @@ worker2   Ready    <none>          131m   v1.27.11   10.129.0.24   <none>       
 worker3   Ready    <none>          131m   v1.27.11   10.129.0.13   <none>        Ubuntu 20.04.6 LTS   5.4.0-172-generic   containerd://1.7.2
 ```
 
-# Проверяем версии на master
+## Проверяем версии на master
 ```shell
 eugen@master1:~$ sudo kubeadm version
 kubeadm version: &version.Info{Major:"1", Minor:"28", GitVersion:"v1.28.7", GitCommit:"c8dcb00be9961ec36d141d2e4103f85f92bcf291", GitTreeState:"clean", BuildDate:"2024-02-14T10:39:01Z", GoVersion:"go1.21.7", Compiler:"gc", Platform:"linux/amd64"}
@@ -216,7 +216,7 @@ Kustomize Version: v5.0.4-0.20230601165947-6ce0bf390ce3
 
 ```
 
-# Обновляем worker-ноды
+## Обновляем worker-ноды
 ```shell
 eugen@master1:~$ kubectl drain worker1 --ignore-daemonsets
 node/worker1 cordoned
@@ -243,7 +243,7 @@ eugen@worker1:~$ sudo kubeadm upgrade node
 sudo systemctl restart kubelet
 ```
 
-# Возращаем worker1 в работу
+## Возращаем worker1 в работу
 ```shell
 eugen@master1:~$ kubectl uncordon worker1
 node/worker1 uncordoned
@@ -259,9 +259,9 @@ worker2   Ready    <none>          154m   v1.28.7
 worker3   Ready    <none>          154m   v1.28.7
 ```
 
-# Kubespray
+## Kubespray
 
-# Подготовим ноды, создадим доступ с гостейвой ВМ на 5 нод
+## Подготовим ноды, создадим доступ с гостейвой ВМ на 5 нод
 ```shell
 sudo swapoff -a && sudo ufw disable && sudo systemctl disable ufw
 sudo apt-get install software-properties-common -y
@@ -282,7 +282,7 @@ sudo python3 -m venv $VENVDIR
 source $VENVDIR/bin/activate
 ```
 
-# Настроим kuberspray
+## Настроим kuberspray
 ```shell
 cd kubespray
 pip install -U -r requirements.txt
@@ -318,12 +318,12 @@ kube_node
 calico_rr
 ```
 
-# Установим кластер
+## Установим кластер
 ```shell
 ansible-playbook -i inventory/eugen/inventory.ini --become --become-user=root --user=${SSH_USERNAME} --key-file=${SSH_PRIVATE_KEY} cluster.yml
 ```
 
-# Результат
+## Результат
 ```shell
 kubectl get nodes
 NAME       STATUS   ROLES           AGE   VERSION
